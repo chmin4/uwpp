@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-a21rlu=qm*kdi!4z#mzt$09d(*b1&pg9m)11l=ua9f^h(8dqa1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['49.166.247.105']
 
 
 # Application definition
@@ -57,7 +57,7 @@ MIDDLEWARE = [
     'axes.middleware.AxesMiddleware'
 ]
 
-ROOT_URLCONF = 'config.urls'
+
 
 TEMPLATES = [
     {

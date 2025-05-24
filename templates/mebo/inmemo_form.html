@@ -1,0 +1,79 @@
+{%extends 'base.html'%}
+{%block content%}
+
+<script src="https://uicdn.toast.com/editor/3.1.5/toastui-editor-all.min.js"></script>
+
+<div class="container">
+    <h5 class="my-3 border-bottom pb-2">작은Memo 수정</h5>
+    <form method="post" id="inmemo-form"><!--memo edit에서 template 재활용을 위해 action을 지정하지 않음(현재 페이지 URL이 기본 action으로 지정됨)-->
+        {%csrf_token%}
+        {% include "form_errors.html" %}    
+  
+    <div class="mb-3">
+        <label for="content" class="form-label">내용</label>
+        <textarea class="form-control" name="content" id="content" style="display:none;" >{{form.content.value|default_if_none:''}}</textarea>
+        <div id="editor"></div>
+    </div>
+        <button type="submit" class="btn btn-primary">저장</button>
+        <a class="btn btn-success" onclick="openPopup()">File List</a>
+
+    </form>
+</div>
+<style>
+  .toastui-editor-contents img {
+  max-width: 600px;
+  max-height: 400px;
+  height: auto;
+  display: block;
+  margin: 1em auto;
+}
+
+  .toastui-editor-contents {
+   font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+}
+
+.toastui-editor-defaultUI textarea,
+.toastui-editor-defaultUI .toastui-editor-md-container {
+   font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+
+}
+
+</style>
+
+{%endblock%}
+{% block script %}
+<script>
+const initialContent = document.getElementById('content')?.value || '';
+
+const editor = new toastui.Editor({
+  el: document.querySelector('#editor'),
+  height: '1000px',
+  initialEditType: 'markdown',
+  previewStyle: 'vertical',
+  initialValue: initialContent,
+  initialEditType: 'wysiwyg',
+  hooks: {
+  addImageBlobHook: (blob, callback) => {
+  alert('로컬 이미지 업로드는 지원하지 않습니다. 이미지 URL을 사용해주세요.');
+  return false;
+  }
+  }
+});
+
+  document.querySelector('#inmemo-form').addEventListener('submit', function () {
+    document.getElementById('content').value = editor.getMarkdown();
+  });
+
+  function openPopup() {
+ window.open(
+ "{% url 'common:file_list' %}", 
+ "popupWindow", 
+ "width=800,height=400,scrollbars=yes" 
+ );
+ if (popup) popup.opener = null;
+
+}
+</script>
+{% endblock %}

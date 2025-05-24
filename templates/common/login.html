@@ -1,0 +1,33 @@
+{%extends "base.html"%}
+{%block content%}
+    <br>
+<div class="container my-3" style="max-width: 400px;">
+<form method="post" class="post-form" action="{% url 'common:login' %}">
+    {%csrf_token%}
+    <input type="hidden" name="next" value="{{next}}">
+    {%include "form_errors.html"%}
+    <div class="form-group">
+        <label for="username">ID</label>
+        <input type="text" class="form-control" name="username" id="username" value="{{form.username.value|default_if_none:''}}">
+    </div>
+    <div class="form-group">
+        <label for="password">PW</label>
+        <input type="password" class="form-control" name="password" id="password">
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary" style="max-width: 400px;">Login</button>
+</form>
+</div>
+ <div class="container my-3 align-items-center ">
+    <div class="card-body">
+      <p class="text-muted text-center">
+                계정이 필요하신 경우<br>
+    <strong>사이트 관리자에게 문의해 주세요.</strong><br>
+                문의: @a.ut.ac.kr
+      </p>
+      </div>
+    </div>
+    <br>
+    <br>
+    <br>
+{%endblock%}

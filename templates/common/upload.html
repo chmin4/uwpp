@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4"><strong>📤 파일 업로드</strong></h2>
+  <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">업로드</button>
+  </form>
+  <div class="mt-3">
+    <a href="{% url 'common:file_list' %}" class="btn btn-link">📁 내 파일 목록 보기</a>
+  </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}

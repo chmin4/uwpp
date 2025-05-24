@@ -1,0 +1,35 @@
+{% extends 'base.html'%}
+{%block content%}
+{% load static %}
+<body>
+<div class="container mt-5">
+    <div class="card mx-auto" style="max-width: 600px;">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">User Profile</h4>
+        </div>
+        <div class="card-body">
+            <div class="text-center mb-3">
+                <img src="/static/basic_profile.png" class="rounded-circle" width="120" height="120" alt="Profile Image">
+            </div>
+            <h5 class="card-title text-center">ID:{{ user.username }}</h5>
+            <form action="{% url 'common:logout' %}" method="post" class="text-muted text-center">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger"><strong>Logout</strong></button>
+            </form>
+            <hr>
+            <div class="text-center">
+            <a class="btn btn-primary text" href="{% url 'mebo:index' %}">Memo Board</a>
+            <a class="btn btn-primary disabled " href="#">Blog</a>
+            <a class="btn btn-primary disabled" href="#">Daily Platform</a>
+            <hr>
+
+            <p><strong>서버에서 사용할 파일을 관리하세요</strong></p>
+            <a class="btn btn-success" href="{% url 'common:file_list' %}">File List</a>
+        </div>
+        </div>
+    </div>
+    <br>
+            <p class="text-center">계정 관련 문의는 사이트 관리자에게 문의하세요: @a.ut.ac.kr</p>
+    
+</div>
+{% endblock %}

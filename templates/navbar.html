@@ -1,0 +1,45 @@
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{%url 'common:intro'%}" title="UWPP"><img src="/static/UWPP_edit.png" width="100" height="50"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'common:userpage' %}"><strong>ID: {{ user.username }}</strong></a>
+        </li>
+        <li class="nav-item">
+            <form action="{% url 'common:logout' %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            <a class="btn btn-success" href="{% url 'common:login' %}">Login</a>
+        </li>
+        {% endif %}
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'mebo:index' %}">Memo Board</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Blog</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Daily Platform</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<style>
+    .container-fluid{
+    max-width: 1200px; 
+  }
+</style>

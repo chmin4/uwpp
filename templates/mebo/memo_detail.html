@@ -1,0 +1,236 @@
+{% extends 'base.html'%}
+{% load mebo_filter %}
+{%block content%}
+
+<script src="https://uicdn.toast.com/editor/3.1.5/toastui-editor-all.min.js"></script>
+<div class="container-all">
+<div class="container my-3">
+   
+    {%if request.user == memo.author or request.user.is_superuser %}
+<div class="d-flex justify-content-between align-items-center border-bottom py-2">
+  <h2 class="border-bottom-py-2"><strong>{{ memo.subject }}</strong></h2>
+
+  <!-- Edit and Delete Buttons Side by Side -->
+  <div class="btn-group" role="group">
+    <a href="{% url 'mebo:memo_modify' memo.id %}" class="btn btn-primary btn-sm">수정</a>
+
+    <form action="{% url 'mebo:memo_delete' memo.id %}" method="post" style="display:inline;" onsubmit="return confirm('정말 삭제하시겠습니까?')">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+    </form>
+  </div>
+</div>
+
+<!-- Memo Content Card -->
+<div class="card my-3">
+  <div class="card-body">
+    <div class="card-text">
+      {{ memo.content|mark }}
+    </div>
+
+    <div class="d-flex flex-column align-items-end">
+      {% if memo.modify_date %}
+      <div class="badge bg-light text-success p-2 text-start mb-2">
+        <div class="mb-2">수정일시:</div>
+        <div>{{ memo.modify_date }}</div>
+      </div>
+      {% endif %}
+
+      <div class="badge bg-light text-dark p-2 text-start">
+        <div class="mb-2">작성일시:</div>
+        <div>{{ memo.create_date }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    {%else%}
+    <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+    <h2 class="border-bottom-py-2"><strong>{{memo.subject}}</strong></h2>
+    </div>
+    <div class="card my-3">
+        <div class="card-body">
+        <div class="card-text">
+            {{memo.content|mark}}
+        </div>
+    <div class="d-flex flex-column align-items-end">
+        {% if memo.modify_date %}
+        <div class="badge bg-light text-success p-2 text-start mb-2">
+            <div class="mb-2">수정일시:</div>
+            <div>{{ memo.modify_date }}</div>
+        </div>
+        {% endif %}
+
+        <div class="badge bg-light text-dark p-2 text-start">
+            <div class="mb-2">작성일시:</div>    
+            <div>{{ memo.create_date }}</div>
+        </div>
+    </div>
+    </div>
+    </div>
+    {%endif%}
+    
+{%if memo.author.is_superuser%}
+{%else%}
+    <h5 class="border-bottom my-3 py-2">작은 Memo {{memo.inmemo_set.count}}개</h5>
+
+<!-- ㅈㄴ헤맨 부분: inmemo가 하나의 memo에 여러 개가 특정되지 않은 상태로 존재하는데, 이때 다짜고짜 inmemo.author로 받아버리니 false가 나왔다 -->   
+{% for inmemo in memo.inmemo_set.all %}    
+{%if request.user == inmemo.author or request.user.is_superuser%}
+
+<div class="d-flex justify-content-between align-items-start border-bottom py-2">
+  <div class="flex-grow-1 me-3">
+    <a id="inmemo{{ inmemo.id }}"></a>
+        <div class="card my-3 mb-0">
+          <div class="card-body">
+            <div class="card-text">{{ inmemo.content|mark }}</div>
+            <div class="d-flex flex-column align-items-end">
+              {% if inmemo.modify_date %}
+              <div class="badge bg-light text-success p-2 text-start mb-2">
+                <div class="mb-2">수정일시:</div>
+                <div>{{ inmemo.modify_date }}</div>
+              </div>
+              {% endif %}
+              <div class="badge bg-light text-dark p-2 text-start">
+                <div class="mb-2">작성일시:</div>
+                <div>{{ inmemo.create_date }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </button>
+  </div>
+
+  <!-- Edit above Delete -->
+  <div class="d-flex flex-column align-items-end mt-3">
+    <a href="{% url 'mebo:inmemo_modify' inmemo.id %}" class="btn btn-primary btn-sm mb-2">수정</a>
+
+    <form action="{% url 'mebo:inmemo_delete' inmemo.id %}" method="post"
+          onsubmit="return confirm('정말 삭제하시겠습니까?')">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger btn-sm"> 삭제 </button>
+    </form>
+  </div>
+</div>
+
+
+
+
+    {%else%}
+
+    <div class="card my-3">
+        <div class="card-body">
+            <div class="card-text">{{inmemo.content|mark}}</div>
+    <div class="d-flex flex-column align-items-end">
+        {% if inmemo.modify_date %}
+        <div class="badge bg-light text-success p-2 text-start mb-2">
+            <div class="mb-2">수정일시:</div>
+            <div>{{ inmemo.modify_date }}</div>
+        </div>
+        {% endif %}
+
+        <div class="badge bg-light text-dark p-2 text-start">
+            <div class="mb-2">작성일시:</div>    
+            <div>{{ inmemo.create_date }}</div>
+        </div>
+    </div>
+
+        </div>
+    </div>
+
+    {%endif%}
+    {%endfor%}
+
+    <form action="{% url 'mebo:inmemo_create' memo.id %}" method="post", class="my-3" id="inmemo-write">
+    {% csrf_token %}
+    {% if form.errors %}<!--에러 영역-->
+    <div class="alert alert-danger" role="alert">
+        {%for field in form%}
+        {%if field.errors%}
+        <div>
+            <strong>{{field.label}}</strong>
+            {{field.errors}}
+        </div>
+        {%endif%}
+        {%endfor%}
+    </div>
+    {%endif%}
+    <!--에러 영역-->
+    <div class="mb-3">
+        <label for="content" class="form-label">작은 Memo 내용</label>
+        <textarea name="content" id="content" class="form-control" style="display:none;" >{{form.content.value|default_if_none:''}}</textarea>
+        <div id="editor"></div>
+    </div>
+        <button type="submit" class="btn btn-primary">작은 Memo 등록</button>
+        <a class="btn btn-success" onclick="openPopup()">File List</a>
+    </form>
+    {%endif%}
+    </div>
+  </div>
+<style>
+
+  .card-text img {
+    max-width: 600px;
+    max-height: 400px;
+    display: block;
+    margin: 1em auto;
+  }
+
+  .toastui-editor-contents img {
+  max-width: 600px;
+  height: auto;
+  display: block;
+  margin: 1em auto;
+}
+
+
+  .toastui-editor-contents {
+   font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+}
+
+.toastui-editor-defaultUI textarea,
+.toastui-editor-defaultUI .toastui-editor-md-container {
+   font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+}
+
+</style>
+
+    {% endblock %}
+    {% block script %}
+
+<script>
+  const initialContent = document.getElementById('content').value;
+
+  const editor = new toastui.Editor({
+    el: document.querySelector('#editor'),
+    height: '1000px',
+    initialEditType: 'markdown',
+    previewStyle: 'vertical',
+    initialEditType: 'wysiwyg',
+    initialValue: initialContent,
+    hooks: {
+  addImageBlobHook: (blob, callback) => {
+  alert('로컬 이미지 업로드는 지원하지 않습니다. 이미지 URL을 사용해주세요.');
+  return false;
+  }
+  }
+  });
+
+    document.querySelector('#inmemo-write').addEventListener('submit', function () {
+    document.getElementById('content').value = editor.getMarkdown();
+  });
+  function openPopup() {
+ window.open(
+ "{% url 'common:file_list' %}", 
+ "popupWindow", 
+ "width=800,height=600,scrollbars=yes" 
+ );
+ if (popup) popup.opener = null;
+
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load mebo_filter %}
+{% block content %}
+<div class="container my-3">
+    <div row-my-3><!--검색창-->
+            <div class="input-group">
+                <input type="text" id="search_kw" class="form-control" value="{{ kw|default_if_none:'' }}">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="btn_search">🔍</button>
+                </div>
+            </div>
+        </div>
+    <table class="table">
+        <thead>
+            <tr class="table-dark">
+                <th>No.</th>
+                <th>제목</th>
+                <th>생성일시</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if broad_list %}
+            {%for memo in broad_list%}
+               <tr>
+                    <td class=" text-danger">
+                       <strong>공지</strong>
+                    </td>
+                    <td>
+                        <a href="{% url 'mebo:detail' memo_id=memo.id  %}">{{memo.subject}}</a>
+                        <!-- 작은Memo 개수 표시기능을 추가하고싶으면 다음과 같이 한다
+                        {% if memo.inmemo_set.count > 0 %}
+                        <span class="text-danger small mx-2">{{memo.inmemo.count}}</span>
+                        {%endif%}
+                        -->
+                    </td>
+                    <td>{{memo.create_date}}</td>
+                </tr>
+            {%endfor%}
+            <div></div>
+            {%else%}
+            {%endif%}
+            {% if memo_list %}
+                {% for memo in memo_list %}
+                <tr>
+                    <td>
+                        {{memo_list.paginator.count|sub:memo_list.start_index|sub:forloop.counter0|add:1}}
+                    </td>
+                    <td>
+                        <a href="{% url 'mebo:detail' memo_id=memo.id  %}">{{memo.subject}}</a>
+                        <!-- 작은Memo 개수 표시기능을 추가하고싶으면 다음과 같이 한다
+                        {% if memo.inmemo_set.count > 0 %}
+                        <span class="text-danger small mx-2">{{memo.inmemo.count}}</span>
+                        {%endif%}
+                        -->
+                    </td>
+                    <td>{{memo.create_date}}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                <td colspan="3" style="text-align: center; padding: 10rem 0;">
+                    memo가 없어요
+                </td>
+                </tr>
+
+                {% endif %}
+        </tbody>
+    </table>
+
+
+    <!--pagination-->
+    <ul class="pagination justify-content-center">
+        {%if memo_list.has_previous%}
+        <li class="page-item">
+            <a class="page-link" data-page="{{memo_list.previous_page_number}}"
+            href="javascript:void(0)">
+                PREVIOUS
+            </a>
+     </li>
+     {%else%}
+     <li class="page-item disabled">
+        <a class="page-link" tableindex="-1" aria-disabled="true" href="#">PREVIOUS</a>
+     </li>
+     {%endif%}
+     {%for page_number in memo_list.paginator.page_range%}
+     {%if page_number >= memo_list.number|add:-3 and page_number <= memo_list.number|add:3%}
+     {%if page_number == memo_list.number%}
+     <li class="page-item active" aria-current="page">
+        <a class="page-link" data-page="{{page_number}}"
+        href="javascript:void(0)">{{page_number}}</a>
+     </li>
+     {%else%}
+     <li class="page-item">
+        <a class="page-link" data-page="{{page_number}}"
+        href="javascript:void(0)">{{page_number}}</a>
+     </li>
+     {%endif%}
+     {%endif%}
+     {%endfor%}
+
+     {%if memo_list.has_next%}
+    <li class="page-item">
+        <a class="page-link" data-page="{{memo_list.next_page_number}}"
+        href="javascript:void(0)">NEXT</a>
+    </li>
+    {%else%}
+    <li class="page-item-disabled">
+        <a class="page-link" tableindex="-1" aria-disabled="true" gref="#">NEXT</a>
+    </li>
+    {%endif%}
+    </ul>
+    <a href="{% url 'mebo:memo_create' %}" class="btn btn-primary">Memo 작성하기</a>
+</div>
+<!--page, kw의 GET요청-->
+<form id="searchForm" method="get" action="{% url 'mebo:index' %}">
+    <input type="hidden" id="page" name="page" value="{{page}}">
+    <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
+</form>
+{% endblock %}
+<!-- 검색 js script -->
+{%block script%}
+<script type="text/javascript">
+    const page_elements = document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function(element) {
+        element.addEventListener('click',function() {
+            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('searchForm').submit();
+        });
+    });
+    const btn_search = document.getElementById('btn_search');
+    btn_search.addEventListener('click',function(){
+        document.getElementById('kw').value = document.getElementById('search_kw').value;
+        document.getElementById('page').value = 1;
+        document.getElementById('searchForm').submit();
+    });
+</script>
+{% endblock %}

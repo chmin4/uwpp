@@ -148,4 +148,4 @@ LOGOUT_REDIRECT_URL = '/'
 
 ROOT_URLCONF='config.urls'
 
-
+DEBUG=False

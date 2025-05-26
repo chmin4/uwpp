@@ -11,7 +11,7 @@
       {% for file in files %}
         <li class="list-group-item d-flex justify-content-between align-items-center">
           <div>
-            <strong>{{ file.file.name|cut:"uploads/" }}</strong><br>
+            <strong>{{ file.assigned_name }}</strong><br>
             <small class="text-muted">{{ file.uploaded_at|date:"Y-m-d H:i" }}</small>
           </div>
           <div>

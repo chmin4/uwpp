@@ -6,5 +6,5 @@ class UploadForm(forms.ModelForm):
         model = UploadedFile
         fields = ['assigned_name', 'file']
         label = {
-            'assigned_name':"파일 이름"
+            'assigned_name':'파일 이름',
         }

@@ -45,7 +45,7 @@ def upload_file(request):
 def download_file(request, file_id):
     try:
         uploaded_file = UploadedFile.objects.get(id=file_id)
-        if uploaded_file.owner != request.user and not request.user.is_superuser:
+        if uploaded_file.owner != request.user and not uploaded_file.owner.is_superuser:
             raise Http404("E:Something went wrong. Please contact the site owner.")
         return FileResponse(uploaded_file.file.open('rb'),as_attachment=True)
     except UploadedFile.DoesNotExist:

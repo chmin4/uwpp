@@ -25,10 +25,10 @@
 
             <p><strong>서버에서 사용할 파일을 관리하세요</strong></p>
             <a class="btn btn-success" href="{% url 'common:file_list' %}">File List</a>
-            {% if user.is_authenticated and user.has_perm("mebo.ide_access") %}
+            {% if user.is_authenticated and user.has_perm("common.access_code_server") %}
                 <hr>
                 <p><strong>이 계정은 CODE-SERVER를 사용할 수 있습니다</strong></p>
-                <a href="{% url 'mebo:secure-ide-view' %}" target="_blank">CODE-SERVER</a>
+                <a href="{% url 'common:secure-ide-view' %}" target="_blank">CODE-SERVER</a>
             {% endif %}
                 
         </div>

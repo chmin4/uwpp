@@ -157,7 +157,7 @@ def inmemo_modify(request,inmemo_id):
 #CRUD_end
 
 @login_required(login_url='common:login')
-@permission_required('mysite.ide_access',raise_exception=True)
+@permission_required('mebo.ide_access',raise_exception=True)
 def ide_redirect(request):
    return redirect("/ide/")
 

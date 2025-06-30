@@ -49,3 +49,6 @@ ht_d:
     implement_method: 
 
 {end class:hts}
+
+code-server 연결
+how to? 별갸의 instance, reverse proxy 연결

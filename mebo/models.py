@@ -19,5 +19,11 @@ class InMemo(models.Model):
     create_date = models.DateTimeField()
     modify_date = models.DateTimeField(null=True, blank=True)
 
+class IdeAccess(models.Model):
+    class Meta:
+        permissions=[
+            ("ide_access", "Can access ide"),
+        ]
+
 #   def __str__(self):
 #       return self.content

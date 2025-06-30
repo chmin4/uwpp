@@ -1,4 +1,4 @@
-from django.http import HttpResponseNotAllowed, JsonResponse
+from django.http import HttpResponseNotAllowed, JsonResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
@@ -155,6 +155,15 @@ def inmemo_modify(request,inmemo_id):
    context = {'inmemo':inmemo, 'form':form}
    return render(request, 'mebo/inmemo_form.html', context)
 #CRUD_end
+
+IDE_ALLOWED_USERS = ['ide']
+
+@login_required(login_url='common:login')
+def ide_redirect(request):
+   if request.user.username not in IDE_ALLOWED_USERS:
+      return HttpResponseForbidden("문제가 발생했습니다")
+   return redirect("/ide/")
+
 
 #File_Uploadings
 

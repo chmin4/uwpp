@@ -1,6 +1,6 @@
 from django.http import FileResponse, Http404
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from .models import UploadedFile
 from .forms import UploadForm
 
@@ -58,5 +58,12 @@ def delete_file(request, file_id):
             raise Http404("E:Something went wrong. Please contact the site owner.")
         uploaded_file.file.delete()
         uploaded_file.delete()
+
+
+@login_required(login_url='common:login')
+@permission_required('common.access_code_server',raise_exception=True)
+def code_ide_redirect(request):
+   return redirect("/ide/")
+    
         return redirect('common:file_list')
 

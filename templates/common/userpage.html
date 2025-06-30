@@ -25,12 +25,10 @@
 
             <p><strong>서버에서 사용할 파일을 관리하세요</strong></p>
             <a class="btn btn-success" href="{% url 'common:file_list' %}">File List</a>
-            {% if user.is_authenticated %}
-                <hr>
-                <p><strong>online IDE redirect</strong></p>
-                <a class="btn btn-dark" href="https://uwpp.ddns.net/ide/" target="_blank">CODE-SERVER</a>
-            {% endif %}
-                
+            <hr>
+            <p><strong>Online IDE Redirect</strong></p>
+            <a class="btn btn-dark" href="https://uwpp.ddns.net/ide/" target="_blank">CODE-SERVER</a>
+
         </div>
         </div>
     </div>

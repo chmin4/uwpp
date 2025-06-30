@@ -12,8 +12,4 @@ class UploadedFile(models.Model):
             raise ValueError("이름을 지정해주세요")
         super().save(*args, **kwargs)
 
-class IdeAccess(models.Model):
-    class Meta:
-        permissions = [
-            ("access_code_server", "Can access code-server IDE"),
-        ]
+

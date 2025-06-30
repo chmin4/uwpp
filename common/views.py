@@ -58,6 +58,7 @@ def delete_file(request, file_id):
             raise Http404("E:Something went wrong. Please contact the site owner.")
         uploaded_file.file.delete()
         uploaded_file.delete()
+        return redirect('common:file_list')
 
 
 @login_required(login_url='common:login')
@@ -65,5 +66,4 @@ def delete_file(request, file_id):
 def code_ide_redirect(request):
    return redirect("/ide/")
     
-        return redirect('common:file_list')
 

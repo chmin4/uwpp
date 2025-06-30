@@ -1,4 +1,4 @@
-from django.http import HttpResponseNotAllowed, JsonResponse, HttpResponseForbidden
+from django.http import HttpResponseNotAllowed, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.core.paginator import Paginator
 from .models import Memo, InMemo
 from .forms import MemoForm, InMemoForm
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
 import markdown
@@ -155,12 +155,6 @@ def inmemo_modify(request,inmemo_id):
    context = {'inmemo':inmemo, 'form':form}
    return render(request, 'mebo/inmemo_form.html', context)
 #CRUD_end
-
-@login_required(login_url='common:login')
-@permission_required('mebo.ide_access',raise_exception=True)
-def ide_redirect(request):
-   return redirect("/ide/")
-
 
 #File_Uploadings
 

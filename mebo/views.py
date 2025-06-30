@@ -156,12 +156,9 @@ def inmemo_modify(request,inmemo_id):
    return render(request, 'mebo/inmemo_form.html', context)
 #CRUD_end
 
-IDE_ALLOWED_USERS = ['ide']
-
 @login_required(login_url='common:login')
+@permission_required('mysite.ide_access',raise_exception=True)
 def ide_redirect(request):
-   if request.user.username not in IDE_ALLOWED_USERS:
-      return HttpResponseForbidden("문제가 발생했습니다")
    return redirect("/ide/")
 
 

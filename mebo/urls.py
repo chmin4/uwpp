@@ -12,5 +12,4 @@ urlpatterns = [
     path('memo/delete/<int:memo_id>/',views.memo_delete, name='memo_delete'),
     path('inmemo/modify/<int:inmemo_id>/', views.inmemo_modify, name='inmemo_modify'),
     path('inmemo/delete/<int:inmemo_id>/',views.inmemo_delete, name='inmemo_delete'),
-    path('access-ide/',views.ide_redirect,name='secure-ide-view'),
 ]
